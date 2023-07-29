@@ -1,6 +1,8 @@
 package com.fredgar.pe.apiproduct.domain.service;
 
 import com.fredgar.pe.apiproduct.domain.dto.ProductDTO;
+import com.fredgar.pe.apiproduct.domain.mapper.ProductMapper;
+import com.fredgar.pe.apiproduct.domain.model.Product;
 import com.fredgar.pe.apiproduct.domain.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +16,7 @@ import reactor.core.publisher.Mono;
 public class ProductServiceImpl implements ProductService{
 
   private final ProductRepository productRepository;
+  private final ProductMapper productMapper;
 
   @Override
   public Flux<ProductDTO> findByName(String name) {
@@ -43,6 +46,12 @@ public class ProductServiceImpl implements ProductService{
 
   @Override
   public Mono<ProductDTO> create(ProductDTO productDTO) {
-    return null;
+    Product product = productMapper.productDTOToProduct(productDTO);
+    return productRepository.save(product)
+        .map(productMapper::productToProductDTO)
+        .onErrorResume(error -> {
+          log.error("Error al buscar por nombre: " + error.getMessage());
+          return Mono.error(new RuntimeException("Error al crear el Producto: " + error.getMessage()));
+        });
   }
 }

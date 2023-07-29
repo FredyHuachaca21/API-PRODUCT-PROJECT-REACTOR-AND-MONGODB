@@ -1,6 +1,5 @@
 package com.fredgar.pe.apiproduct.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

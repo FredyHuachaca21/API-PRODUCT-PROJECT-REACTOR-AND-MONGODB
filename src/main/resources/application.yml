@@ -1,5 +1,7 @@
 spring:
   data:
     mongodb:
-      uri: mongodb://localhost:27017/productdb
+      uri: mongodb://localhost:27017/DB_API_PRODUCT_WEBFLUX
 
+server:
+  port: 9095
